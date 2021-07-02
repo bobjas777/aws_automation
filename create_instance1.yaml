@@ -1,10 +1,17 @@
-Resources: 
-	  MyEC2Instance:
-	    Type: AWS::EC2::Instance 
-	    Properties:
-	      ImageId: ami-0ab4d1e9cf9a1215a
-	      InstanceType: t2.micro
-	      SubnetId: subnet-0218e5b9bc49c2278
-	      Tags: 
-	        - Key: "Name"
-	          Value: !Join ["",[EC2,Instance,with, Fn, Join ]]
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0ab4d1e9cf9a1215a
+      InstanceType: t2.micro 
+      SubnetId: subnet-0218e5b9bc49c2278
+      Tags:
+        - Key: "Name"
+          Value: !Join ["",[EC2,Instance,with, Fn, Join ]]
+      SecurityGroups:
+        - !Ref SshSecurityGroup
+  
+  
+
+
+
