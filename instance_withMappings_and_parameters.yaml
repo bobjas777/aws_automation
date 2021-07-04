@@ -1,0 +1,70 @@
+Parameters:
+  InstTypeParameter:
+    Type: String 
+    Default: t2.micro 
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - m1.small
+      - m1.large 
+    Description: Ec2 instance type
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Ec2 Key pair name 
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-0ab4d1e9cf9a1215a
+    us-west-1:
+      AMI: ami-02f24ad9a1d24a799
+    eu-west-1:
+      AMI: ami-0f89681a05a3a9de7
+    ap-southeast-1:
+      AMI: ami-018c1c51c7a13e363
+    ap-southeast-2:
+      AMI: ami-05064bb33b40c33a2 
+Resources:
+  Ec2Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstTypeParameter
+      
+      ImageId:
+        Fn::FindInMap:
+        - RegionMap
+        - !Ref AWS::Region
+        - AMI
+      SecurityGroups: 
+        - !Ref MySecurityGroup
+      
+      Tags:
+        - Key: "Name"
+          Value: "Insstance1" 
+           
+  Ec2Instance2:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: !Ref InstTypeParameter
+      
+      ImageId:
+        Fn::FindInMap:
+        - RegionMap
+        - !Ref AWS::Region
+        - AMI
+      SecurityGroups: 
+        - !Ref MySecurityGroup
+      
+      Tags:
+        - Key: "Name"
+          Value: "Instance2" 
+          
+  MySecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
