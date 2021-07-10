@@ -1,0 +1,25 @@
+Parameters:
+ MyKeyName:
+    Type: AWS::EC2::KeyPair::KeyName 
+    Description: Select the keypair 
+
+Mappings:
+  MyRegionMap: 
+    us-east-1:
+      HVM64: ami-0d5eff06f840b45e9
+    ca-central-1:
+      HVM64: ami-0db72f413fc1ddb2a
+
+
+Resources:
+  MyVMInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap
+       - MyRegionMap
+       - !Ref 'AWS::Region'
+       - HVM64
+      InstanceType: t2.micro
+      KeyName: !Ref MyKeyName 
+      SubnetId: s1-public
+
